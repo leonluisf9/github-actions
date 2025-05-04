@@ -14,7 +14,7 @@
     "build": "concurrently \"cd server && npm run build\" \"cd client && npm run build\"",
     "render-build": "npm install && npm run build",
     "test": "npx cypress run --browser electron --headless",
-    "test-component": "npx cypress run --config-file cypress.config.ts --component",
+    "test-component": "npx cypress run --config-file cypress.config.ts --component --headless",
     "test-gui": "npx cypress open --detached"
   },
   "keywords": [],

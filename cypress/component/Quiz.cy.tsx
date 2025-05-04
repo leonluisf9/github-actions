@@ -1,27 +1,31 @@
 import Quiz from '../../client/src/components/Quiz';
 
 describe('Quiz', () => {
-    it('should render the quiz React component entirely', () => {
+    beforeEach(() => {
+        cy.intercept('GET', '/api/questions/random', {
+            statusCode: 200,
+            fixture: 'questions.json',
+          }).as('getQuestions'); // Alias the intercept
         cy.mount(<Quiz />);
     });
     it('should render the title text on the screen', () => {
-      cy.mount(<Quiz />);
+    
       cy.get('h1').should('have.text', 'Welcome to the Code Quiz!');
     });
     it('should render the start button', () => {
-        cy.mount(<Quiz />);
+      
         cy.contains('Start Quiz').should('exist');
     });
     
     it('should render the component housing the questions', () => {
-      cy.mount(<Quiz />);
+    
       cy.contains('Start Quiz').click();
       cy.wait(500); // Adjust the wait time based on your API response time
       cy.get('.card h2').should('exist');
   });
 
   it('should render 4 buttons for each question', () => {
-    cy.mount(<Quiz />);
+  
     cy.contains('Start Quiz').click();
     cy.wait(500); // Adjust the wait time based on your API response time
     cy.get('.btn-primary').should('have.length', 4);
@@ -32,14 +36,11 @@ describe('Quiz', () => {
     it('should render the question data from the db', () => {
         // Mount the component
         cy.log('Mounting the Quiz component');
-        cy.mount(<Quiz />);
+      
 
         // Intercept the API call and replace with mock data from fixture
         cy.log('Setting up API intercept for /api/questions/random');
-        cy.intercept('GET', '/api/questions/random', {
-            statusCode: 200,
-            fixture: 'questions.json', // Use the mock data from questions.json fixture
-        }).as('getQuestions'); // Alias the intercept
+
 
         // Log to check if intercept is set up correctly
         cy.log('API intercept set. Waiting for Start Quiz click.');
@@ -66,7 +67,7 @@ describe('Quiz', () => {
     it('should keep track of correct answers and display the correct score', () => {
         // Mount the component
         cy.log('Mounting the Quiz component');
-        cy.mount(<Quiz />);
+      
     
         // Intercept the API call and replace with mock data from fixture
         cy.log('Setting up API intercept for /api/questions/random');
@@ -97,7 +98,7 @@ describe('Quiz', () => {
         cy.get('[data-cy="score"]').should('be.visible'); // Assuming correct answers lead to a perfect score
       });
     it('should display the quiz completed message after answering all questions', () => {
-        cy.mount(<Quiz />);
+      
         cy.contains('Start Quiz').click();
         cy.wait(500); // Adjust the wait time based on your API response time
         // Loop through each question and answer all questions
@@ -109,7 +110,7 @@ describe('Quiz', () => {
         cy.contains('Quiz Completed').should('be.visible');
     });
     it('should render the button to take a new quiz after the quiz is over', () => {
-        cy.mount(<Quiz />);
+      
         cy.contains('Start Quiz').click();
         cy.wait(500); // Adjust the wait time based on your API response time
         // Loop through each question and answer all questions
