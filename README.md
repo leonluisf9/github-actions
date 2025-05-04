@@ -4,7 +4,7 @@
 1. [Description](#description)
 2. [Installation](#installation)
 3. [Usage](#usage)
-4. [Contributing](#contributing)
+4. [Screenshots](#Screenshots)
 5. [Link](#Deployed-App-Link)
 6. [License](#license)
 7. [Questions](#questions)
@@ -14,9 +14,12 @@ CI/CD pipeline using GitHub Actions to run the component tests via Cypress when 
 ## Installation
 Clone the repository: https://github.com/leonluisf9/github-actions Navigate to the project directory: Install dependencies: Setup MongoDB and Environment variables then Start Backend npm start build and Frontend npm run client:build and client:dev Open the App Visit http://localhost:3001/ in your browser
 ## Usage
-Use Client Front End to Start Quiz, answer questions and click next button until the End where you will get your score.
-## Contributing
-Please contribute. If you have a suggestion that would make this better, please fork the repo and create a pull request
+Use Client Front End to Start Quiz, answer questions and click next button until the End where you will get your score. Wwhen a Pull Request is submitted to a develop branch A GitHub Action must trigger and the Action must execute the Cypress component tests. All Cypress component tests must pass. When a Pull Request is submitted and merged to the main branch A GitHub Action must trigger and the Action must automatically deploy the application to Render.
+## Screenshots
+GitHub Actions for tests
+![alt text](image-2.png)
+GitHub Actions for deployments
+![alt text](image-3.png)
 ## Deployed-App-Link
 https://github-actions-h2gh.onrender.com
 ## License
