@@ -5,7 +5,7 @@
 2. [Installation](#installation)
 3. [Usage](#usage)
 4. [Contributing](#contributing)
-5. [Video](#video)
+5. [Link](#Deployed-App-Link)
 6. [License](#license)
 7. [Questions](#questions)
 
@@ -17,8 +17,8 @@ Clone the repository: https://github.com/leonluisf9/github-actions Navigate to t
 Use Client Front End to Start Quiz, answer questions and click next button until the End where you will get your score.
 ## Contributing
 Please contribute. If you have a suggestion that would make this better, please fork the repo and create a pull request
-## Video
-Coming Soon
+## Deployed-App-Link
+https://github-actions-h2gh.onrender.com
 ## License
 Please visit http://choosealicense.com/licenses/mit/ to get information for this license
 ## Questions
