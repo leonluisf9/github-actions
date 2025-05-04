@@ -1,69 +1,98 @@
-import Quiz from "../../client/src/components/Quiz";
+import { useState, } from 'react';
+import type { Question } from '../models/Question.js';
+import { getQuestions } from '../services/questionApi.js';
 
-describe('Quiz Component Suite', ()=> {
-    //tutoring with Benicio
-    beforeEach(()=> {
-        cy.intercept({
-            method: 'GET',
-            url: '/api/questions/random'
-        }, 
-        {
-            fixture: 'questions.json',
-            statusCode: 200
-        }).as('getRandomQuestions')
-    });
-    
-    it('should render the start button initially', () => {
-        //check start quiz button
-        cy.mount(<Quiz />);
-        cy.contains('Start Quiz').should('be.visible');
-    });
-    
-    it('should start the quiz and display the first question', () => {
-        //start quiz
-        cy.mount(<Quiz />);
-        cy.get('button').contains('Start Quiz').click();
+const Quiz = () => {
+  const [questions, setQuestions] = useState<Question[]>([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [score, setScore] = useState(0);
+  const [quizCompleted, setQuizCompleted] = useState(false);
+  const [quizStarted, setQuizStarted] = useState(false);
 
-        // display question
-        cy.get('h2').should('be.visible');
-        cy.get('h2').contains('What is the output of print(2 ** 3)?');
-    
-        // display answers
-        cy.get('.btn.btn-primary').should('have.length', 4); 
-        cy.get('.alert.alert-secondary').each(($el) => {
-        cy.wrap($el).should('be.visible');
-        }); 
-    })
+  const getRandomQuestions = async () => {
+    try {
+      const questions = await getQuestions();
 
-    it('should display a finish screen when all questions are answered', () => {
-        cy.mount(<Quiz />);
+      if (!questions) {
+        throw new Error('something went wrong!');
+      }
 
-        //click through the quiz answers
-        for(let i=0; i<21; i++){
-            cy.get('.btn.btn-primary').first().click({multiple:true});
-        }
-        
-        //check title and button for quiz complete page
-        cy.get('h2').contains('Quiz Completed').should('be.visible');
-        cy.get('button').should('be.visible');
-    })
+      setQuestions(questions);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
-    it('should bring up a new quiz page when the Take New Quiz button is pressed', () => {
-        cy.mount(<Quiz />);
+  const handleAnswerClick = (isCorrect: boolean) => {
+    if (isCorrect) {
+      setScore(score + 1);
+    }
 
-        //start a new quiz
-        cy.get('button').click();
+    const nextQuestionIndex = currentQuestionIndex + 1;
+    if (nextQuestionIndex < questions.length) {
+      setCurrentQuestionIndex(nextQuestionIndex);
+    } else {
+      setQuizCompleted(true);
+    }
+  };
 
-         // display question
-         cy.get('h2').should('be.visible');
-         cy.get('h2').contains('What is the output of print(2 ** 3)?');
-     
-         // display answers
-         cy.get('.btn.btn-primary').should('have.length', 4); 
-         cy.get('.alert.alert-secondary').each(($el) => {
-         cy.wrap($el).should('be.visible');
-         }); 
+  const handleStartQuiz = async () => {
+    await getRandomQuestions();
+    setQuizStarted(true);
+    setQuizCompleted(false);
+    setScore(0);
+    setCurrentQuestionIndex(0);
+  };
 
-    })
+  if (!quizStarted) {
+    return (
+      <div className="p-4 text-center">
+        <button className="btn btn-primary d-inline-block mx-auto" onClick={handleStartQuiz}>
+          Start Quiz
+        </button>
+      </div>
+    );
+  }
 
-});
+  if (quizCompleted) {
+    return (
+      <div className="card p-4 text-center">
+        <h2>Quiz Completed</h2>
+        <div className="alert alert-success">
+          Your score: {score}/{questions.length}
+        </div>
+        <button className="btn btn-primary d-inline-block mx-auto" onClick={handleStartQuiz}>
+          Take New Quiz
+        </button>
+      </div>
+    );
+  }
+
+  if (questions.length === 0) {
+    return (
+      <div className="d-flex justify-content-center align-items-center vh-100">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
+  const currentQuestion = questions[currentQuestionIndex];
+
+  return (
+    <div className='card p-4'>
+      <h2>{currentQuestion.question}</h2>
+      <div className="mt-3">
+      {currentQuestion.answers.map((answer, index) => (
+        <div key={index} className="d-flex align-items-center mb-2">
+          <button className="btn btn-primary" onClick={() => handleAnswerClick(answer.isCorrect)}>{index + 1}</button>
+          <div className="alert alert-secondary mb-0 ms-2 flex-grow-1">{answer.text}</div>
+        </div>
+      ))}
+      </div>
+    </div>
+  );
+};
+
+export default Quiz;
