@@ -9,9 +9,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Debug RENDER_DEPLOY_HOOK
-        run: echo "RENDER_DEPLOY_HOOK=${{ secrets.RENDER_DEPLOY_HOOK_URL }}" # Debug step (remove after testing)
-
       - name: Deploy
         if: github.ref == 'refs/heads/main'
         env:
