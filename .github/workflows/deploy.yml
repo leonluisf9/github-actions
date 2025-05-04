@@ -9,6 +9,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Debug RENDER_DEPLOY_HOOK
+      run: echo "RENDER_DEPLOY_HOOK=${{ secrets.RENDER_DEPLOY_HOOK }}" # Debug step (remove after testing)
+
       - name: Trigger Render Deployment
         run: |
           curl -X POST "$RENDER_DEPLOY_HOOK"
