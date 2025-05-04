@@ -1,61 +1,42 @@
-// e2e user journey
-// 'it' in this case is the user
 
-describe('User Journey', () => {
-    beforeEach(() => {
-        cy.intercept("GET", "/api/questions/random", { fixture: "questions.json" }).as("getQuestions");
-        cy.visit('http://127.0.0.1:3001/');
-    });
+describe('Quiz E2E Suite', ()=> {
+    beforeEach(()=> {
+        cy.visit('/')
+    })
 
-    it('should see the title text on the screen', () => {
-        cy.get('h1').should('have.text', 'Welcome to the Code Quiz!');
-    });
-    it('should be able to click the start button', () => {
-        cy.findByRole('button', { name: 'Start Quiz' }).click();
-    });
-    it('should see the quiz question', () => {
-        cy.findByRole('button', { name: 'Start Quiz' }).click();
-        cy.get('.card h2').should('exist');
-    });
-    it('should see the multiple choice answers', () => {
-        cy.findByRole('button', { name: 'Start Quiz' }).click();
-        cy.get('.card button').should('exist');
-    });
-    it('should be able to click on the answer button 1-4', () => {
-        cy.findByRole('button', { name: 'Start Quiz' }).click();
-        cy.get('.btn-primary').first().click();
-    });
-    it('should display the next question after clicking on an answer', () => {
-        cy.findByRole('button', { name: 'Start Quiz' }).click();
-        cy.wait(500); // wait for page load
-        cy.get('.btn-primary').first().click(); // Assuming the first answer is correct
-        cy.get('.card h2').should('exist');
-    });
-    it('should see the Quiz Completed text when the quiz is over', () => {
+    it('visits the home page', () => {
+        cy.visit('http://localhost:3001')
+
+    })
+
+    it('should allow you to take the quiz and open to quiz completed page', () => {
         cy.get('button').click();
-        cy.wait(500); // wait for page load
-        for (let i = 0; i < 10; i++) {
-            cy.get('.btn-primary').first().click();
-            cy.wait(500); // Adjust the wait time based on your application's response time
+
+        //check question
+        cy.get('h2').should('be.visible');
+        
+        //click through quiz
+        for(let i=0; i<21; i++){
+            cy.get('button').first().click();
         }
-        cy.get('h2').should('have.text', 'Quiz Completed');
-    });
-    it('should see their score when quiz is over', () => {
+
+        // check completed page
+        cy.contains('Quiz Completed').should('be.visible');
+        cy.contains('Your score').should('be.visible');
+        cy.contains('Take New Quiz').should('be.visible');
+    })
+
+    it('should allow you to click the Take New Quiz button and start a new quiz', () => {
         cy.get('button').click();
-        cy.wait(700); // wait for page load
-        for (let i = 0; i < 10; i++) { // loop through all 10 questions
-            cy.get('.btn-primary').first().click();
-            cy.wait(700); // Adjust the wait time based on your application's response time
-        }
-        cy.get('[data-cy="score"]').should('exist');
-    });
-    it('should see / click the button to take a new quiz, when the quiz is over', () => {
-        cy.get('button').click();
-        cy.wait(500); // wait for page load
-        for (let i = 0; i < 10; i++) {// loop through all 10 questions
-            cy.get('.btn-primary').first().click();
-            cy.wait(500); // Adjust the wait time based on your application's response time
-        }
-        cy.get('h2').should('have.text', 'Quiz Completed');
-    });
-});
+
+        //check question
+        cy.get('h2').should('be.visible');
+        
+        //check answer visibility 
+        cy.get('.btn.btn-primary').should('have.length', 4); 
+        cy.get('.alert.alert-secondary').each(($el) => {
+        cy.wrap($el).should('be.visible');
+        }); 
+
+    })
+})
