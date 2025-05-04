@@ -39,7 +39,7 @@ jobs:
         run: npm run start > /dev/null 2>&1 &
 
       - name: Wait for server to be ready
-        run: npx wait-on http://localhost:3001 --silent
+        run: npx wait-on http://localhost:3001 > /dev/null 2>&1
 
       - name: Run Cypress Tests
-        run: npm run test --silent
+        run: npm run test 
