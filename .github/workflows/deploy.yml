@@ -10,7 +10,7 @@ jobs:
 
     steps:
       - name: Debug RENDER_DEPLOY_HOOK
-      run: echo "RENDER_DEPLOY_HOOK=${{ secrets.RENDER_DEPLOY_HOOK }}" # Debug step (remove after testing)
+        run: echo "RENDER_DEPLOY_HOOK=${{ secrets.RENDER_DEPLOY_HOOK }}" # Debug step (remove after testing)
 
       - name: Trigger Render Deployment
         run: |
