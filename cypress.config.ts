@@ -16,5 +16,12 @@ export default defineConfig({
     setupNodeEvents(on, config) {
       // implement node event listeners here
     },
+    reporter: 'spec', // or 'junit', 'mochawesome', etc.
+    reporterOptions: {
+      mochaFile: 'results/test-results.xml',
+      toConsole: true,
+    },
   },
 });
+
+
