@@ -47,6 +47,7 @@ const Quiz = () => {
   if (!quizStarted) {
     return (
       <div className="p-4 text-center">
+        <h1>Welcome to the Code Quiz!</h1>
         <button className="btn btn-primary d-inline-block mx-auto" onClick={handleStartQuiz}>
           Start Quiz
         </button>
@@ -58,9 +59,7 @@ const Quiz = () => {
     return (
       <div className="card p-4 text-center">
         <h2>Quiz Completed</h2>
-        <div className="alert alert-success">
-          Your score: {score}/{questions.length}
-        </div>
+        <h3 data-cy="score" className="alert alert-success">Your score: {score}/{questions.length}</h3>
         <button className="btn btn-primary d-inline-block mx-auto" onClick={handleStartQuiz}>
           Take New Quiz
         </button>
@@ -96,3 +95,4 @@ const Quiz = () => {
 };
 
 export default Quiz;
+export type { Question };
