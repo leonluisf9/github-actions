@@ -25,7 +25,7 @@ jobs:
         run: npm run build
 
       - name: Start server in background
-        run: npm run watch
+        run: npm run start
 
       - name: Wait for server to be ready
         run: npx wait-on http://localhost:3001
